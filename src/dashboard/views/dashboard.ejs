@@ -1,0 +1,18 @@
+<%- include('partials/header', { title: 'Panel' }) %>
+<h2>Sunucuların</h2>
+<p class="muted">Yönetici veya "Sunucuyu Yönet" yetkin olan sunucular.</p>
+<section class="grid">
+  <% guilds.forEach(g => { %>
+    <article class="card guild">
+      <% if (g.iconUrl) { %><img src="<%= g.iconUrl %>" alt=""><% } else { %><div class="ph"><%= g.name.charAt(0) %></div><% } %>
+      <h3><%= g.name %></h3>
+      <% if (g.botIn) { %>
+        <a class="btn" href="/dashboard/<%= g.id %>">Yönet</a>
+      <% } else { %>
+        <a class="btn ghost" href="<%= g.invite %>" target="_blank" rel="noopener">Botu Ekle</a>
+      <% } %>
+    </article>
+  <% }) %>
+  <% if (!guilds.length) { %><p class="muted">Yönetebileceğin sunucu bulunamadı.</p><% } %>
+</section>
+<%- include('partials/footer') %>

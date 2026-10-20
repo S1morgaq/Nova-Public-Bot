@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= typeof title !== 'undefined' ? title + ' • ' : '' %><%= botName %></title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+<header class="nav">
+  <a class="brand" href="/"><% if (botAvatar) { %><img src="<%= botAvatar %>" alt=""><% } %><span><%= botName %></span></a>
+  <nav>
+    <a href="/" class="<%= path === '/' ? 'active' : '' %>">Ana Sayfa</a>
+    <a href="/dashboard" class="<%= path.startsWith('/dashboard') ? 'active' : '' %>">Panel</a>
+    <a href="<%= inviteUrl %>" target="_blank" rel="noopener">Botu Ekle</a>
+  </nav>
+  <div class="auth">
+    <% if (user) { %>
+      <span class="who"><%= user.username %></span>
+      <a class="btn ghost" href="/logout">Çıkış</a>
+    <% } else { %>
+      <a class="btn" href="/login">Discord ile Giriş</a>
+    <% } %>
+  </div>
+</header>
+<main class="container">
+<% if (flash) { %><div class="flash <%= flash.type %>" data-autohide><%= flash.text %></div><% } %>

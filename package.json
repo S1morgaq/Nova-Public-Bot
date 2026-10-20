@@ -1,0 +1,29 @@
+{
+  "name": "nova-bot",
+  "version": "1.0.0",
+  "description": "Moderasyon, seviye, ekonomi, ticket, çekiliş ve web paneli olan Discord botu",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "typecheck": "tsc --noEmit"
+  },
+  "engines": {
+    "node": ">=18.17"
+  },
+  "dependencies": {
+    "discord.js": "^14.16.3",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.21.1",
+    "express-session": "^1.18.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/express-session": "^1.18.0",
+    "@types/node": "^20.16.0",
+    "tsx": "^4.19.1",
+    "typescript": "^5.6.3"
+  }
+}

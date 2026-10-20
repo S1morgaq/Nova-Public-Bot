@@ -1,0 +1,25 @@
+<%- include('partials/header', { title: 'Ana Sayfa' }) %>
+<section class="hero">
+  <h1>Sunucunu <span class="grad">bir üst seviyeye</span> taşı</h1>
+  <p>Moderasyon, AutoMod, seviye, ekonomi, ticket ve çekiliş — hepsi tek botta, web panelden yönetilebilir.</p>
+  <div class="cta">
+    <a class="btn lg" href="<%= inviteUrl %>" target="_blank" rel="noopener">Sunucuna Ekle</a>
+    <a class="btn lg ghost" href="/dashboard">Panele Git</a>
+  </div>
+  <div class="stats">
+    <div><b data-stat="guilds"><%= stats.guilds %></b><span>Sunucu</span></div>
+    <div><b data-stat="users"><%= stats.users %></b><span>Kullanıcı</span></div>
+    <div><b data-stat="commands"><%= stats.commands %></b><span>Komut</span></div>
+    <div><b data-stat="ping"><%= stats.ping %></b><span>ms Ping</span></div>
+  </div>
+</section>
+<section class="grid">
+  <% features.forEach(f => { %>
+    <article class="card feature reveal">
+      <div class="icon"><%= f.icon %></div>
+      <h3><%= f.title %></h3>
+      <p><%= f.text %></p>
+    </article>
+  <% }) %>
+</section>
+<%- include('partials/footer') %>

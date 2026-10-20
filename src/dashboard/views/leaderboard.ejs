@@ -1,0 +1,22 @@
+<%- include('partials/header', { title: guild.name + ' Sıralama' }) %>
+<div class="titlebar">
+  <h2>🏆 <%= guild.name %> — Seviye Sıralaması</h2>
+</div>
+<section class="card">
+  <table class="table">
+    <thead><tr><th>#</th><th>Üye</th><th>Seviye</th><th>XP</th><th>Mesaj</th></tr></thead>
+    <tbody>
+      <% rows.forEach(r => { %>
+        <tr class="<%= r.rank <= 3 ? 'top' : '' %>">
+          <td><%= r.rank %></td>
+          <td class="usr"><% if (r.avatar) { %><img src="<%= r.avatar %>" alt=""><% } %><%= r.name %></td>
+          <td><%= r.level %></td>
+          <td><%= r.xp %></td>
+          <td><%= r.messages %></td>
+        </tr>
+      <% }) %>
+      <% if (!rows.length) { %><tr><td colspan="5" class="muted">Henüz veri yok.</td></tr><% } %>
+    </tbody>
+  </table>
+</section>
+<%- include('partials/footer') %>

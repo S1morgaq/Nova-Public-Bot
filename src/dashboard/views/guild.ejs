@@ -1,0 +1,105 @@
+<%- include('partials/header', { title: guild.name }) %>
+<div class="titlebar">
+  <div>
+    <h2><%= guild.name %></h2>
+    <p class="muted"><%= memberCount %> üye</p>
+  </div>
+  <div>
+    <a class="btn ghost" href="/leaderboard/<%= guild.id %>" target="_blank">Sıralama</a>
+    <a class="btn ghost" href="/dashboard">← Sunucular</a>
+  </div>
+</div>
+
+<form method="post" class="form" data-dirty-guard>
+  <input type="hidden" name="_csrf" value="<%= csrf %>">
+
+  <%
+    const chanSelect = (name, value, list = channels) => {
+      let h = `<select name="${name}"><option value="">— Kapalı —</option>`;
+      list.forEach(c => { h += `<option value="${c.id}"${c.id === value ? ' selected' : ''}>#${c.name.replace(/</g, '&lt;')}</option>`; });
+      return h + '</select>';
+    };
+    const roleSelect = (name, value) => {
+      let h = `<select name="${name}"><option value="">— Yok —</option>`;
+      roles.forEach(r => { h += `<option value="${r.id}"${r.id === value ? ' selected' : ''}>@${r.name.replace(/</g, '&lt;')}</option>`; });
+      return h + '</select>';
+    };
+  %>
+
+  <section class="card">
+    <h3>📋 Genel & Log</h3>
+    <label>Log kanalı <%- chanSelect('logChannel', settings.logChannel) %></label>
+    <label class="switch"><input type="checkbox" name="levelEnabled" <%= settings.levelEnabled ? 'checked' : '' %>> <span>Seviye sistemi açık</span></label>
+    <label>Prefix
+      <input type="text" name="prefix" value="<%= settings.prefix %>" maxlength="3" required>
+      <small class="muted">Komutlar hem <code>/komut</code> hem <code><%= settings.prefix %>komut</code> ile çalışır.</small>
+    </label>
+  </section>
+
+  <section class="card">
+    <h3>⭐ Starboard</h3>
+    <label>Starboard kanalı <%- chanSelect('starChannel', settings.starChannel) %></label>
+    <label>Gereken ⭐ sayısı
+      <input type="number" name="starThreshold" value="<%= settings.starThreshold %>" min="1" max="25">
+    </label>
+  </section>
+
+  <section class="card">
+    <h3>🚨 Anti-Raid</h3>
+    <label class="switch"><input type="checkbox" name="ar_enabled" <%= settings.antiRaid.enabled ? 'checked' : '' %>> <span>Raid korumasını aç</span></label>
+    <label>Tetiklenme: giriş sayısı <input type="number" name="ar_joins" value="<%= settings.antiRaid.joins %>" min="2" max="50"></label>
+    <label>Süre (saniye) <input type="number" name="ar_seconds" value="<%= settings.antiRaid.seconds %>" min="3" max="120"></label>
+    <label>Minimum hesap yaşı (gün, 0 = kapalı) <input type="number" name="ar_age" value="<%= settings.antiRaid.minAccountDays %>" min="0" max="365"></label>
+  </section>
+
+  <section class="card">
+    <h3>👋 Karşılama</h3>
+    <label>Hoş geldin kanalı <%- chanSelect('welcomeChannel', settings.welcomeChannel) %></label>
+    <label>Ayrılma kanalı <%- chanSelect('goodbyeChannel', settings.goodbyeChannel) %></label>
+    <label>Otorol <%- roleSelect('autoRole', settings.autoRole) %></label>
+    <label>Hoş geldin mesajı
+      <textarea name="welcomeMessage" rows="3" maxlength="500"><%= settings.welcomeMessage %></textarea>
+      <small class="muted">Değişkenler: <code>{user}</code> <code>{server}</code> <code>{count}</code></small>
+    </label>
+  </section>
+
+  <section class="card">
+    <h3>🛡️ AutoMod</h3>
+    <label class="switch"><input type="checkbox" name="am_invites" <%= settings.automod.invites ? 'checked' : '' %>> <span>Davet linklerini engelle</span></label>
+    <label class="switch"><input type="checkbox" name="am_links" <%= settings.automod.links ? 'checked' : '' %>> <span>Tüm linkleri engelle</span></label>
+    <label class="switch"><input type="checkbox" name="am_caps" <%= settings.automod.caps ? 'checked' : '' %>> <span>Aşırı büyük harfi engelle</span></label>
+    <label class="switch"><input type="checkbox" name="am_spam" <%= settings.automod.spam ? 'checked' : '' %>> <span>Spam koruması</span></label>
+    <label>Yasaklı kelimeler
+      <textarea name="badWords" rows="3" placeholder="virgül veya satır ile ayır"><%= settings.automod.badWords.join(', ') %></textarea>
+    </label>
+    <small class="muted">"Mesajları Yönet" yetkisi olanlar AutoMod'dan muaftır.</small>
+  </section>
+
+  <section class="card">
+    <h3>⛓️ Jail & 🔊 Özel Oda & 👥 Sayaç</h3>
+    <label>Jail rolü <%- roleSelect('jailRole', settings.jailRole) %></label>
+    <label>Özel oda hub kanalı (girince oda açılır) <%- chanSelect('roomHub', settings.roomHub, vchannels) %></label>
+    <label>Üye sayacı kanalı <%- chanSelect('counterChannel', settings.counterChannel, vchannels) %></label>
+  </section>
+
+  <section class="card">
+    <h3>🛡️ Guard (Sunucu Koruması)</h3>
+    <% if (isOwner) { %>
+      <label class="switch"><input type="checkbox" name="g_enabled" <%= settings.guard.enabled ? 'checked' : '' %>> <span>Korumayı aç</span></label>
+      <label>İhlal cezası
+        <select name="g_punishment">
+          <% [['ban','Yasakla'],['kick','At'],['strip','Rollerini al']].forEach(p => { %>
+            <option value="<%= p[0] %>" <%= settings.guard.punishment === p[0] ? 'selected' : '' %>><%= p[1] %></option>
+          <% }) %>
+        </select>
+      </label>
+      <label>Dakikada izin verilen ban/kick <input type="number" name="g_limit" value="<%= settings.guard.limit %>" min="1" max="20"></label>
+      <small class="muted">Beyaz liste için <code>/guard izinver</code> kullan. Kanal/rol silme, izinsiz bot, tehlikeli izin verme ve limit aşımı korunur.</small>
+    <% } else { %>
+      <p class="muted">Guard ayarlarını sadece sunucu sahibi değiştirebilir. Durum: <b><%= settings.guard.enabled ? 'Açık' : 'Kapalı' %></b></p>
+    <% } %>
+  </section>
+
+  <div class="savebar"><button class="btn lg" type="submit">Kaydet</button></div>
+</form>
+<%- include('partials/footer') %>

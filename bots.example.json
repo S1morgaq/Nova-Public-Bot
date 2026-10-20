@@ -1,0 +1,29 @@
+{
+  "_aciklama": "Bu dosyayı bots.json olarak kopyala. Her bot Developer Portal'da ayrı bir uygulamadır. bots.json yoksa .env'deki tek TOKEN ile hepsi tek botta çalışır. Aynı modülü iki bota verme (komutlar iki kez cevaplanır).",
+  "bots": [
+    {
+      "name": "Ana",
+      "token": "ANA_BOT_TOKEN",
+      "clientId": "ANA_BOT_CLIENT_ID",
+      "modules": ["core", "moderation", "level", "economy", "fun", "tools"]
+    },
+    {
+      "name": "Guard",
+      "token": "GUARD_BOT_TOKEN",
+      "clientId": "GUARD_BOT_CLIENT_ID",
+      "modules": ["guard", "jail"]
+    },
+    {
+      "name": "Karşılama",
+      "token": "WELCOME_BOT_TOKEN",
+      "clientId": "WELCOME_BOT_CLIENT_ID",
+      "modules": ["welcome", "register"]
+    },
+    {
+      "name": "İstatistik",
+      "token": "STATS_BOT_TOKEN",
+      "clientId": "STATS_BOT_CLIENT_ID",
+      "modules": ["stats", "logs", "rooms"]
+    }
+  ]
+}

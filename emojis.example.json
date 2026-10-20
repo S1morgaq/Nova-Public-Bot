@@ -1,0 +1,8 @@
+{
+  "_aciklama": "Bunu emojis.json olarak kopyala. Değerler Discord'daki özel emoji kodlarıdır: sunucuda \\:emoji: yazıp gönderirken ön izlemeden kodu kopyala. Hareketli olanlar <a:ad:ID> biçimindedir. Bot o emojinin bulunduğu sunucuda olmalıdır.",
+  "loading": "<a:loading:000000000000000000>",
+  "success": "<a:success:000000000000000000>",
+  "error": "<a:error:000000000000000000>",
+  "spin": "<a:spin:000000000000000000>",
+  "party": "<a:party:000000000000000000>"
+}
